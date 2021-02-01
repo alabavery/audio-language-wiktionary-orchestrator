@@ -12,6 +12,7 @@ def get_steps(data_directory, language, alternate_words_directory=None):
     tokens_directory = get_path('tokens')
     definitions_directory = get_path('definitions')
     lemmas_directory = get_path('lemmas')
+    final_directory = get_path('combined')
 
     tokens_dir_successes = os.path.join(tokens_directory, 'successes')
 
@@ -72,5 +73,16 @@ def get_steps(data_directory, language, alternate_words_directory=None):
                 tokens_dir_successes,
                 definitions_directory,
             ],
+        },
+        {
+            "name": "combine",
+            "description": "Combine inputs from previous steps",
+            "script": "combine.sh",
+            "args": [
+                words_directory,
+                definitions_directory,
+                lemmas_directory,
+                final_directory,
+            ]
         }
     ]
