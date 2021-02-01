@@ -1,6 +1,6 @@
 **list of words and working directory**
 </br>|</br>|</br>v</br>
-[wiktionary-download](https://github.com/alabavery/audio-language-wiktionary-download)              f
+[wiktionary-download](https://github.com/alabavery/audio-language-wiktionary-download)
 </br>|</br>|</br>v</br>
 **downloaded pages**
 </br>|</br>|</br>v</br>
@@ -8,7 +8,7 @@
 </br>|</br>|</br>v</br>
 **tokens json files (each section of the targeted language divided by line into array)**
 </br>|</br>|</br>v</br>
-[wiktionary-lemmas](https://github.com/alabavery/audio-language-wiktionary-lemmas)
+[wiktionary-lemma](https://github.com/alabavery/audio-language-wiktionary-lemma)
 </br>|</br>|</br>v</br>
 **lemmas json files**
 </br>|</br>|</br>v</br>
