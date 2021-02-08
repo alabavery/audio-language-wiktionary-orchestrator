@@ -2,15 +2,25 @@ import os
 import json
 
 import run_step
+from colors import Bcolors as bc
 
 
 def main(lemmas_dir, data_dir, pipeline_step_getter):
     lemma_word_list_dir = make_lemmas_words_list(lemmas_dir, data_dir)
 
+    print(f"{bc.WARNING} \n\n\nBegin lemma-regroup sub-steps")
+    print("----------------------------------------------------------------------------------------------")
+    print(f"{bc.ENDC}")
+
+
     for step in pipeline_step_getter(lemma_word_list_dir):
         if step["name"] == "lemmas":
             break
         run_step.run(step)
+
+    print(f"{bc.WARNING} End lemma-regroup sub-steps")
+    print("---------------------------------------------------------------------------------------------")
+    print(f"{bc.ENDC}")
 
 
 def make_lemmas_words_list(lemmas_dir, target_dir):
