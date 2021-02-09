@@ -1,5 +1,5 @@
-docker rm -f wiktionary-combine;
 docker run \
+    --rm \
     --name=wiktionary-combine \
     -v $1:"/wds_dir_mt" \
     -v $2:"/def_dir_mt" \

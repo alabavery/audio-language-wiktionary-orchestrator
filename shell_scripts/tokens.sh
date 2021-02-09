@@ -1,5 +1,5 @@
-docker rm -f wiktionary-breakdown;
 docker run \
+    --rm \
     --name=wiktionary-breakdown \
     -v $1:"/words_directory_mount" \
     -v $2:"/pages_directory_mount" \
