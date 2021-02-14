@@ -14,6 +14,8 @@ def main(lemmas_dir, data_dir, pipeline_step_getter):
 
 
     for step in pipeline_step_getter(lemma_word_list_dir):
+        if step["name"] == "clear paths":
+            continue
         if step["name"] == "lemmas":
             break
         run_step.run(step)

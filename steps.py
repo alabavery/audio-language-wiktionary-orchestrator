@@ -15,14 +15,18 @@ def get_steps(data_directory, language, alternate_words_directory=None):
     final_directory = get_path('combined')
 
     tokens_dir_successes = os.path.join(tokens_directory, 'successes')
-
-    lemma_regroup_directory = get_path('lemma_regroup')
-
-    print("word list path", words_directory)
-    print("pages path", pages_directory)
-    print("tokens path", tokens_directory)
-
     return [
+        {
+            "name": "clear paths",
+            "description": "Clear stale data",
+            "script": "clear.sh",
+            "args": [
+                tokens_directory,
+                definitions_directory,
+                lemmas_directory,
+                final_directory,
+            ],
+        },
         {
             "name": "download",
             "description": "Download wiki pages",
@@ -86,3 +90,4 @@ def get_steps(data_directory, language, alternate_words_directory=None):
             ]
         }
     ]
+        
