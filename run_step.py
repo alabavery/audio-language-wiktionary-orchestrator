@@ -17,13 +17,17 @@ def run(step):
     params = step.get("args", [])
 
     if script_name:
-        os.system("{script_path} {script_args}".format(
-            script_path=os.path.join(scripts_directory, step["script"]),
-            script_args=(' ').join(params)
-        ))
+        run_shell_script(script_name, params)
     else:
         fn(*params)
 
-    print(f"{bc.HEADER}", f"{bc.BOLD}")
+    print(f"{bc.OKBLUE}", f"{bc.BOLD}")
     print("FINSHED STEP {}\n\n".format(step["name"]))
     print(f"{bc.ENDC}")
+
+
+def run_shell_script(script_name, params):
+    os.system("{script_path} {script_args}".format(
+        script_path=os.path.join(scripts_directory, script_name),
+        script_args=(' ').join(params)
+    ))

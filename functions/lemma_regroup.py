@@ -5,15 +5,15 @@ import run_step
 from colors import Bcolors as bc
 
 
-def main(lemmas_dir, data_dir, pipeline_step_getter):
-    lemma_word_list_dir, lemma_to_pos = make_lemmas_words_list(lemmas_dir, data_dir)
+def main(lemmas_dir, lemma_regroup_words_list_dir, pipeline_step_getter):
+    lemma_to_pos = make_lemmas_words_list(lemmas_dir, lemma_regroup_words_list_dir)
 
     print(f"{bc.WARNING} \n\n\nBegin lemma-regroup sub-steps")
     print("----------------------------------------------------------------------------------------------")
     print(f"{bc.ENDC}")
 
 
-    for step in pipeline_step_getter(lemma_word_list_dir):
+    for step in pipeline_step_getter():
         if step["name"] == "clear paths":
             continue
         if step["name"] == "lemmas":
@@ -30,7 +30,7 @@ def main(lemmas_dir, data_dir, pipeline_step_getter):
     print(f"{bc.ENDC}")
 
 
-def make_lemmas_words_list(lemmas_dir, target_dir):
+def make_lemmas_words_list(lemmas_dir, lemma_regroup_words_list_dir):
     paths = [os.path.join(lemmas_dir, f) for f in os.listdir(lemmas_dir)]
     part_of_speech_tracker = dict() # { [lemma]: { [pos]: true } }
 
@@ -52,15 +52,14 @@ def make_lemmas_words_list(lemmas_dir, target_dir):
     for path in paths:
         lemmas += get_lemmas_from_path(path)
     
-    output_dir = os.path.join(target_dir, 'lemmas_regroup_word_list')
-    with open(os.path.join(output_dir, 'words.json'), 'w') as f:
+    with open(os.path.join(lemma_regroup_words_list_dir, 'words.json'), 'w') as f:
         f.write(json.dumps(lemmas))
     
     lemma_to_parts_of_speech = dict()
     for lemma in list(part_of_speech_tracker.keys()):
         lemma_to_parts_of_speech[lemma] = list(part_of_speech_tracker[lemma].keys())
 
-    return output_dir, lemma_to_parts_of_speech
+    return lemma_to_parts_of_speech
 
 
 def create_missing_lemmas_files(lemmas_dir, lemma_to_parts_of_speech):

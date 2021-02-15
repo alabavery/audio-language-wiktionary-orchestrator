@@ -1,7 +1,7 @@
 import os
 
-from functions import lemma_regroup
-
+from functions import lemma_regroup, final_words_list
+import db
 
 def get_steps(data_directory, language, alternate_words_directory=None):
     def get_path(sub_path):
@@ -13,6 +13,8 @@ def get_steps(data_directory, language, alternate_words_directory=None):
     definitions_directory = get_path('definitions')
     lemmas_directory = get_path('lemmas')
     final_directory = get_path('combined')
+    lemmas_words_dir = get_path('lemmas_regroup_words_list')
+    final_words_dir = get_path('final_word_list')
 
     tokens_dir_successes = os.path.join(tokens_directory, 'successes')
     return [
@@ -25,6 +27,8 @@ def get_steps(data_directory, language, alternate_words_directory=None):
                 definitions_directory,
                 lemmas_directory,
                 final_directory,
+                lemmas_words_dir,
+                final_words_dir,
             ],
         },
         {
@@ -65,8 +69,8 @@ def get_steps(data_directory, language, alternate_words_directory=None):
             "function": lemma_regroup.main,
             "args": [
                 lemmas_directory,
-                data_directory,
-                lambda lemmas_words_dir: get_steps(data_directory, language, alternate_words_directory=lemmas_words_dir)
+                lemmas_words_dir,
+                lambda: get_steps(data_directory, language, alternate_words_directory=lemmas_words_dir)
             ],
         },
         {
@@ -79,14 +83,46 @@ def get_steps(data_directory, language, alternate_words_directory=None):
             ],
         },
         {
+            "name": "create final words",
+            "description": "Combine original word list with lemma regroup word list",
+            "function": final_words_list.make,
+            "args": [
+                words_directory,
+                lemmas_words_dir,
+                final_words_dir,
+            ],
+        },
+        {
             "name": "combine",
             "description": "Combine inputs from previous steps",
             "script": "combine.sh",
             "args": [
-                words_directory,
+                final_words_dir,
                 definitions_directory,
                 lemmas_directory,
                 final_directory,
+            ]
+        },
+        {
+            "name": "start db",
+            "description": "start db docker (harmless error if it's already running)",
+            "script": "start-db.sh",
+            "args": [
+                db.DB.HOST,
+                db.DB.PASSWORD,
+                db.DB.USER,
+                db.DB.DB_NAME,
+                db.DB.NETWORK,
+            ],
+        },
+        {
+            "name": "populate db",
+            "description": "create and populate tables in a sql store",
+            "script": "db.sh",
+            "args": [
+                final_directory,
+                db.DB.NETWORK,
+                db.CONNECTION_STRING,
             ]
         }
     ]
