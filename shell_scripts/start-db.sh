@@ -6,4 +6,5 @@ docker run \
     -e POSTGRES_DB=$4 \
     -d \
     --network $5 \
+    -v $6:"/var/lib/postgresql/data" \
     postgres;

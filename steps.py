@@ -3,7 +3,7 @@ import os
 from functions import lemma_regroup, final_words_list
 import db
 
-def get_steps(data_directory, language, alternate_words_directory=None):
+def get_steps(data_directory, language, database_directory=None, alternate_words_directory=None):
     def get_path(sub_path):
         return os.path.join(data_directory, sub_path)
     
@@ -113,6 +113,7 @@ def get_steps(data_directory, language, alternate_words_directory=None):
                 db.DB.USER,
                 db.DB.DB_NAME,
                 db.DB.NETWORK,
+                database_directory,
             ],
         },
         {
@@ -124,6 +125,14 @@ def get_steps(data_directory, language, alternate_words_directory=None):
                 db.DB.NETWORK,
                 db.CONNECTION_STRING,
             ]
-        }
+        },
+        {
+            "name": "stop db",
+            "description": "kill the postgres container",
+            "script": "stop-db.sh",
+            "args": [
+                db.DB.HOST,
+            ],
+        },
     ]
         

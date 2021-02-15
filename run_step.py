@@ -7,10 +7,11 @@ code_path = pathlib.Path(__file__).parent.absolute()
 scripts_directory = os.path.join(code_path, 'shell_scripts')
 
 
-def run(step):
-    print(f"{bc.HEADER}", f"{bc.BOLD}", f"{bc.UNDERLINE}")
-    print("BEGINNING STEP {}".format(step["name"]))
-    print(f"{bc.ENDC}")
+def run(step, should_describe=True):
+    if should_describe:
+        print(f"{bc.HEADER}", f"{bc.BOLD}", f"{bc.UNDERLINE}")
+        print("BEGINNING STEP {}".format(step["name"]))
+        print(f"{bc.ENDC}")
 
     script_name = step.get("script")
     fn = step.get("function")
@@ -21,9 +22,11 @@ def run(step):
     else:
         fn(*params)
 
-    print(f"{bc.OKBLUE}", f"{bc.BOLD}")
-    print("FINSHED STEP {}\n\n".format(step["name"]))
-    print(f"{bc.ENDC}")
+    if should_describe:
+        print(f"{bc.OKBLUE}", f"{bc.BOLD}")
+        print("FINSHED STEP {}\n\n".format(step["name"]))
+        print("--------------------------------------------------------------------------------")
+        print(f"{bc.ENDC}")
 
 
 def run_shell_script(script_name, params):

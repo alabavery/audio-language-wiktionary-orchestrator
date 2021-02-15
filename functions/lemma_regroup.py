@@ -8,25 +8,31 @@ from colors import Bcolors as bc
 def main(lemmas_dir, lemma_regroup_words_list_dir, pipeline_step_getter):
     lemma_to_pos = make_lemmas_words_list(lemmas_dir, lemma_regroup_words_list_dir)
 
-    print(f"{bc.WARNING} \n\n\nBegin lemma-regroup sub-steps")
-    print("----------------------------------------------------------------------------------------------")
-    print(f"{bc.ENDC}")
-
+    log("\n\n\nBegin lemma-regroup sub-steps")
+    log("-------------------------------------------------------------")
 
     for step in pipeline_step_getter():
-        if step["name"] == "clear paths":
+        name = step["name"]
+        if name == "clear paths":
             continue
-        if step["name"] == "lemmas":
+        if name == "lemmas":
             break
-        run_step.run(step)
+        log("begin lemma-regroup substep {}".format(name))
+        log("---------")
+        run_step.run(step, should_describe=False)
+        log("finished lemma-regroup step {}".format(name))
 
-    print(f"{bc.WARNING} End lemma-regroup sub-steps")
-    print("---------------------------------------------------------------------------------------------")
-    print(f"{bc.ENDC}")
+    log("End lemma-regroup sub-steps")
+    log("-------------------------------------------------------------")
 
-    print(f"{bc.WARNING} Creating missing lemmas files")
+    log("Creating missing lemmas files")
     created = create_missing_lemmas_files(lemmas_dir, lemma_to_pos)
-    print("Done creating {} missing lemmas files".format(created))
+    log("Done creating {} missing lemmas files".format(created))
+
+
+def log(msg):
+    print(f"{bc.WARNING}")
+    print(msg)
     print(f"{bc.ENDC}")
 
 
